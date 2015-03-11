@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "GMImagePickerController.h"
+#import <MobileCoreServices/MobileCoreServices.h>
 
 @import UIKit;
 @import Photos;
@@ -42,6 +43,11 @@
     picker.colsInLandscape = 5;
     picker.minimumInteritemSpacing = 2.0;
     picker.modalPresentationStyle = UIModalPresentationPopover;
+
+    picker.showsDoneButtonItem = NO;
+    picker.allowsMultipleSelection = NO;
+    picker.allowsVideoEditing = YES;
+    picker.maxVideoDuration = 2.;
     
     UIPopoverPresentationController *popPC = picker.popoverPresentationController;
     popPC.permittedArrowDirections = UIPopoverArrowDirectionAny;
@@ -57,6 +63,10 @@
     picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     picker.delegate = self;
     picker.modalPresentationStyle = UIModalPresentationPopover;
+
+    picker.mediaTypes = @[(NSString *)kUTTypeMovie, (NSString *)kUTTypeVideo, (NSString *)kUTTypeImage];
+    picker.allowsEditing = YES;
+    picker.videoMaximumDuration = 2.;
     
     UIPopoverPresentationController *popPC = picker.popoverPresentationController;
     popPC.permittedArrowDirections = UIPopoverArrowDirectionAny;

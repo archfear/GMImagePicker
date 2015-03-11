@@ -22,7 +22,7 @@ static CGSize const kPopoverContentSize = {480, 720};
 /**
  *  A controller that allows picking multiple photos and videos from user's photo library.
  */
-@interface GMImagePickerController : UIViewController
+@interface GMImagePickerController : UIViewController <UINavigationControllerDelegate, UIVideoEditorControllerDelegate>
 
 /**
  *  The assets picker’s delegate object.
@@ -72,6 +72,26 @@ static CGSize const kPopoverContentSize = {480, 720};
 @property (nonatomic) NSInteger colsInPortrait;
 @property (nonatomic) NSInteger colsInLandscape;
 @property (nonatomic) double minimumInteritemSpacing;
+
+/**
+ *  defaults to YES; if NO the 'Done' BarButtonItem is removed and the 'Cancel' BarButtonItem is moved to the right side
+ */
+@property (nonatomic) BOOL showsDoneButtonItem;
+
+/**
+ *  defaults to YES; if NO the first item selected is immediatly used (single selection + equivalent of pressing the 'Done' button.
+ */
+@property (nonatomic) BOOL allowsMultipleSelection;
+
+/**
+ *  defaults to NO; if YES (and allowsMultipleSelection == NO) when a video is selected push to a UIVideoEditorController
+ */
+@property (nonatomic) BOOL allowsVideoEditing;
+
+/**
+ *  defaults to 600 (10 min)
+ */
+@property (nonatomic) NSTimeInterval maxVideoDuration;
 
 
 @property (nonatomic, strong) UINavigationController *navigationController;

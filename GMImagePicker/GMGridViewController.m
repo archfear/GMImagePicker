@@ -201,13 +201,16 @@ NSString * const GMGridViewCellIdentifier = @"GMGridViewCellIdentifier";
 
 - (void)setupButtons
 {
-    self.navigationItem.rightBarButtonItem =
-    [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringFromTable(@"picker.navigation.done-button", @"GMImagePicker",@"Done")
-                                     style:UIBarButtonItemStyleDone
-                                    target:self.picker
-                                    action:@selector(finishPickingAssets:)];
-    
-    self.navigationItem.rightBarButtonItem.enabled = (self.picker.selectedAssets.count > 0);
+    if (self.picker.allowsMultipleSelection == YES)
+    {
+        self.navigationItem.rightBarButtonItem =
+        [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringFromTable(@"picker.navigation.done-button", @"GMImagePicker",@"Done")
+                                         style:UIBarButtonItemStyleDone
+                                        target:self.picker
+                                        action:@selector(finishPickingAssets:)];
+        
+        self.navigationItem.rightBarButtonItem.enabled = (self.picker.selectedAssets.count > 0);
+    }
 }
 
 - (void)setupToolbar
@@ -287,6 +290,11 @@ NSString * const GMGridViewCellIdentifier = @"GMGridViewCellIdentifier";
     // Increment the cell's tag
     NSInteger currentTag = cell.tag + 1;
     cell.tag = currentTag;
+
+    if (self.picker.allowsMultipleSelection == NO)
+    {
+        cell.visualSelectionEnabled = NO;
+    }
     
     PHAsset *asset = self.assetsFetchResults[indexPath.item];
     
@@ -373,7 +381,17 @@ NSString * const GMGridViewCellIdentifier = @"GMGridViewCellIdentifier";
     [self.picker selectAsset:asset];
     
     if ([self.picker.delegate respondsToSelector:@selector(assetsPickerController:didSelectAsset:)])
+    {
         [self.picker.delegate assetsPickerController:self.picker didSelectAsset:asset];
+    }
+
+    if (self.picker.allowsMultipleSelection == NO)
+    {
+        if ([self.picker respondsToSelector:@selector(finishPickingAssets:)])
+        {
+            [self.picker finishPickingAssets:self];
+        }
+    }
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath

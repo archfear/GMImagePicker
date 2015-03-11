@@ -10,6 +10,7 @@
 
 
 @interface GMGridViewCell ()
+@property (nonatomic) UIView *highlightOverlayDarkView;
 @end
 
 
@@ -122,7 +123,8 @@ static UIColor *disabledColor;
         _selectedButton.hidden = NO;
         _selectedButton.userInteractionEnabled = NO;
         [self addSubview:_selectedButton];
-        
+
+        self.visualSelectionEnabled = YES;
     }
     
     return self;
@@ -154,10 +156,43 @@ static UIColor *disabledColor;
 }
 
 // Override setSelected
+- (void)setHighlighted:(BOOL)highlighted
+{
+    [super setHighlighted:highlighted];
+
+    if (highlighted)
+    {
+        if (!self.highlightOverlayDarkView)
+        {
+            self.highlightOverlayDarkView = [[UIView alloc] initWithFrame:self.bounds];
+            self.highlightOverlayDarkView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:.5];
+        }
+        [self insertSubview:self.highlightOverlayDarkView aboveSubview:self.imageView];
+    }
+    else
+    {
+        [UIView animateWithDuration:.2 delay:.2 options:0 animations:^{
+            self.highlightOverlayDarkView.alpha = 0.;
+        } completion:^(BOOL finished) {
+            [self.highlightOverlayDarkView removeFromSuperview];
+            self.highlightOverlayDarkView = nil;
+        }];
+    }
+}
+
 - (void)setSelected:(BOOL)selected
 {
+//    if (self.visualSelectionEnabled == NO && (selected == NO && super.selected == YES))
+//    {
+//        selected = YES;
+//    }
+
     [super setSelected:selected];
-    _coverView.hidden = !selected;
+
+    if (self.visualSelectionEnabled)
+    {
+        _coverView.hidden = !selected;
+    }
     _selectedButton.selected = selected;
 }
 
@@ -168,6 +203,20 @@ static UIColor *disabledColor;
     NSInteger minutes = (ti / 60) % 60;
     //NSInteger hours = (ti / 3600);
     return [NSString stringWithFormat:@"%02ld:%02ld", (long)minutes, (long)seconds];
+}
+
+- (void)setVisualSelectionEnabled:(BOOL)visualSelectionEnabled
+{
+    _visualSelectionEnabled = visualSelectionEnabled;
+
+    if (visualSelectionEnabled == NO)
+    {
+        [self.selectedButton setImage:nil forState:UIControlStateSelected];
+    }
+    else
+    {
+        [self.selectedButton setImage:[UIImage imageNamed:@"GMSelected"] forState:UIControlStateSelected];
+    }
 }
 
 @end

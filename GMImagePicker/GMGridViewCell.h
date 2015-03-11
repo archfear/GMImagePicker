@@ -26,6 +26,8 @@
 
 @property (nonatomic, assign, getter = isEnabled) BOOL enabled;
 
+@property (nonatomic) BOOL visualSelectionEnabled;
+
 - (void)bind:(PHAsset *)asset;
 
 @end

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		146D2F4B1AAFD74F0096A709 /* GMVideoEditorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 146D2F4A1AAFD74F0096A709 /* GMVideoEditorController.m */; };
 		B31E08651A0C45BC000D7841 /* GMImagePicker.strings in Resources */ = {isa = PBXBuildFile; fileRef = B31E084C1A0C45BC000D7841 /* GMImagePicker.strings */; };
 		B31E08661A0C45BC000D7841 /* GMImagePicker.strings in Resources */ = {isa = PBXBuildFile; fileRef = B31E084F1A0C45BC000D7841 /* GMImagePicker.strings */; };
 		B31E08671A0C45BC000D7841 /* GMImagePicker.strings in Resources */ = {isa = PBXBuildFile; fileRef = B31E08521A0C45BC000D7841 /* GMImagePicker.strings */; };
@@ -46,6 +47,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		146D2F491AAFD74F0096A709 /* GMVideoEditorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMVideoEditorController.h; sourceTree = "<group>"; };
+		146D2F4A1AAFD74F0096A709 /* GMVideoEditorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GMVideoEditorController.m; sourceTree = "<group>"; };
 		B31E084D1A0C45BC000D7841 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = GMImagePicker.strings; sourceTree = "<group>"; };
 		B31E08501A0C45BC000D7841 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = GMImagePicker.strings; sourceTree = "<group>"; };
 		B31E08531A0C45BC000D7841 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = GMImagePicker.strings; sourceTree = "<group>"; };
@@ -254,6 +257,8 @@
 				B3A2F8AB19D18A3700A59BE4 /* GMGridViewController.m */,
 				B3A2F8AC19D18A3700A59BE4 /* GMImagePickerController.h */,
 				B3A2F8AD19D18A3700A59BE4 /* GMImagePickerController.m */,
+				146D2F491AAFD74F0096A709 /* GMVideoEditorController.h */,
+				146D2F4A1AAFD74F0096A709 /* GMVideoEditorController.m */,
 			);
 			name = GMImagePicker;
 			path = ../../GMImagePicker;
@@ -308,10 +313,11 @@
 				TargetAttributes = {
 					B37D577319CA3B3A007F64BD = {
 						CreatedOnToolsVersion = 6.0;
-						DevelopmentTeam = 683CMQCKAS;
+						DevelopmentTeam = 3AFFCYX2D5;
 					};
 					B37D578C19CA3B3A007F64BD = {
 						CreatedOnToolsVersion = 6.0;
+						DevelopmentTeam = 3AFFCYX2D5;
 						TestTargetID = B37D577319CA3B3A007F64BD;
 					};
 				};
@@ -382,6 +388,7 @@
 			files = (
 				B3A2F8AE19D18A3700A59BE4 /* GMAlbumsViewCell.m in Sources */,
 				B37D578019CA3B3A007F64BD /* ViewController.m in Sources */,
+				146D2F4B1AAFD74F0096A709 /* GMVideoEditorController.m in Sources */,
 				B3A2F8B019D18A3700A59BE4 /* GMGridViewCell.m in Sources */,
 				B37D577D19CA3B3A007F64BD /* AppDelegate.m in Sources */,
 				B37D577A19CA3B3A007F64BD /* main.m in Sources */,
@@ -510,7 +517,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -552,7 +559,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -576,9 +583,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = GMPhotoPicker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -587,9 +596,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = GMPhotoPicker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

@@ -8,10 +8,12 @@
 
 #import "GMImagePickerController.h"
 #import "GMAlbumsViewController.h"
+#import "GMGridViewController.h"
+#import "GMVideoEditorController.h"
 @import Photos;
 
-@interface GMImagePickerController () <UINavigationControllerDelegate>
-
+@interface GMImagePickerController ()
+@property (nonatomic, weak) GMGridViewController *gridViewController;
 @end
 
 @implementation GMImagePickerController
@@ -43,6 +45,10 @@
         //_customSmartCollections=nil;
         
         self.preferredContentSize = kPopoverContentSize;
+        self.showsDoneButtonItem = YES;
+        self.allowsMultipleSelection = YES;
+        self.allowsVideoEditing = YES;
+        self.maxVideoDuration = 600.;
         
         [self setupNavigationController];
     }
@@ -113,10 +119,13 @@
 - (void)updateToolbar
 {
     UINavigationController *nav = (UINavigationController *)self.childViewControllers[0];
-    for (UIViewController *viewController in nav.viewControllers)
+    if (self.allowsMultipleSelection)
     {
-        [[viewController.toolbarItems objectAtIndex:1] setTitle:[self toolbarTitle]];
-        [viewController.navigationController setToolbarHidden:(self.selectedAssets.count == 0) animated:YES];
+        for (UIViewController *viewController in nav.viewControllers)
+        {
+            [[viewController.toolbarItems objectAtIndex:1] setTitle:[self toolbarTitle]];
+            [viewController.navigationController setToolbarHidden:(self.selectedAssets.count == 0) animated:YES];
+        }
     }
 }
 
@@ -133,9 +142,77 @@
 
 - (void)finishPickingAssets:(id)sender
 {
-    if ([self.delegate respondsToSelector:@selector(assetsPickerController:didFinishPickingAssets:)])
-        [self.delegate assetsPickerController:self didFinishPickingAssets:self.selectedAssets];
-    
+    UIViewController *senderViewController = sender;
+    PHAsset *asset = (PHAsset *)self.selectedAssets.firstObject;
+    if (!self.allowsMultipleSelection && self.allowsVideoEditing && (asset.mediaType == PHAssetMediaTypeVideo))
+    {
+        // PHContentEditingInputRequestID requestId =
+        self.gridViewController = sender;
+        [asset requestContentEditingInputWithOptions:nil
+                                   completionHandler:^(PHContentEditingInput *contentEditingInput, NSDictionary *info) {
+                                       AVAsset *avAsset = contentEditingInput.avAsset;
+                                       if ([avAsset isKindOfClass:[AVURLAsset class]])
+                                       {
+                                           AVURLAsset *urlAsset = (id)avAsset;
+                                           NSString *videoPath = [[urlAsset.URL absoluteURL] path];
+
+                                           if ([UIVideoEditorController canEditVideoAtPath:videoPath])
+                                           {
+                                               GMVideoEditorController *videoEditor = [[GMVideoEditorController alloc] init];
+                                               videoEditor.videoQuality = UIImagePickerControllerQualityTypeHigh;
+                                               videoEditor.videoMaximumDuration = self.maxVideoDuration;
+                                               videoEditor.videoPath = videoPath;
+                                               videoEditor.delegate = self;
+
+                                               videoEditor.modalTransitionStyle = UIModalTransitionStylePartialCurl;
+                                               self.modalPresentationStyle = UIModalPresentationFullScreen;
+                                               videoEditor.navigationBar.barTintColor = [UIColor whiteColor];
+                                               videoEditor.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor blackColor]};
+
+                                               if ([NSThread isMainThread])
+                                               {
+                                                   [senderViewController presentViewController:videoEditor animated:YES completion:^{
+//                                                       [videoEditor.view.superview addSubview:self.view];
+                                                   }];
+                                               }
+                                               else
+                                               {
+                                                   dispatch_async(dispatch_get_main_queue(), ^{
+                                                       [senderViewController presentViewController:videoEditor animated:YES completion:^{
+//                                                           [videoEditor.view.superview addSubview:self.view];
+                                                       }];
+                                                   });
+                                               }
+                                           }
+                                           else
+                                           {
+                                               dispatch_async(dispatch_get_main_queue(), ^{
+                                                   if ([self.delegate respondsToSelector:@selector(assetsPickerController:didFinishPickingAssets:)])
+                                                   {
+                                                       [self.delegate assetsPickerController:self didFinishPickingAssets:self.selectedAssets];
+                                                   }
+                                               });
+                                           }
+                                       }
+                                       else
+                                       {
+                                           dispatch_async(dispatch_get_main_queue(), ^{
+                                               if ([self.delegate respondsToSelector:@selector(assetsPickerController:didFinishPickingAssets:)])
+                                               {
+                                                   [self.delegate assetsPickerController:self didFinishPickingAssets:self.selectedAssets];
+                                               }
+                                           });
+                                       }
+                                   }];
+    }
+    else
+    {
+        if ([self.delegate respondsToSelector:@selector(assetsPickerController:didFinishPickingAssets:)])
+        {
+            [self.delegate assetsPickerController:self didFinishPickingAssets:self.selectedAssets];
+        }
+    }
+
     //[self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -219,6 +296,36 @@
     return @[space, title, space];
 }
 
+#pragma mark UIVideoEditorControllerDelegate
+- (void)videoEditorController:(UIVideoEditorController *)editor didSaveEditedVideoToPath:(NSString *)editedVideoPath; // edited video is saved to a path in app's temporary directory
+{
+    [editor dismissViewControllerAnimated:YES completion:^{
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }];
+}
 
+- (void)videoEditorController:(UIVideoEditorController *)editor didFailWithError:(NSError *)error;
+{
+    [editor dismissViewControllerAnimated:YES completion:^{
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }];
+}
+
+- (void)videoEditorControllerDidCancel:(UIVideoEditorController *)editor;
+{
+    if (self.allowsMultipleSelection == NO)
+    {
+        [self.selectedAssets removeAllObjects];
+        for (UICollectionViewCell *eachVisibleCell in self.gridViewController.collectionView.visibleCells)
+        {
+            if (eachVisibleCell.selected)
+            {
+                eachVisibleCell.selected = NO;
+            }
+        }
+    }
+
+    [editor dismissViewControllerAnimated:YES completion:nil];
+}
 
 @end

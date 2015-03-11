@@ -58,23 +58,34 @@ static NSString * const CollectionCellReuseIdentifier = @"CollectionCell";
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
     //Navigation bar items
-    //if (self.picker.showsCancelButton)
+    if (self.picker.showsDoneButtonItem)
     {
-        self.navigationItem.leftBarButtonItem =
+        //if (self.picker.showsCancelButton)
+        {
+            self.navigationItem.leftBarButtonItem =
+            [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringFromTable(@"picker.navigation.cancel-button", @"GMImagePicker",@"Cancel")
+                                             style:UIBarButtonItemStylePlain
+                                            target:self.picker
+                                            action:@selector(dismiss:)];
+        }
+
+        self.navigationItem.rightBarButtonItem =
+        [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringFromTable(@"picker.navigation.done-button", @"GMImagePicker",@"Done")
+                                         style:UIBarButtonItemStyleDone
+                                        target:self.picker
+                                        action:@selector(finishPickingAssets:)];
+
+        self.navigationItem.rightBarButtonItem.enabled = (self.picker.selectedAssets.count > 0);
+    }
+    else
+    {
+        self.navigationItem.rightBarButtonItem =
         [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringFromTable(@"picker.navigation.cancel-button", @"GMImagePicker",@"Cancel")
                                          style:UIBarButtonItemStylePlain
                                         target:self.picker
                                         action:@selector(dismiss:)];
     }
-    
-    self.navigationItem.rightBarButtonItem =
-    [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringFromTable(@"picker.navigation.done-button", @"GMImagePicker",@"Done")
-                                     style:UIBarButtonItemStyleDone
-                                    target:self.picker
-                                    action:@selector(finishPickingAssets:)];
-    
-    self.navigationItem.rightBarButtonItem.enabled = (self.picker.selectedAssets.count > 0);
-    
+
     //Bottom toolbar
     self.toolbarItems = self.picker.toolbarItems;
     
