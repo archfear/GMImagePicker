@@ -82,7 +82,6 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    
     [picker.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     NSLog(@"UIImagePickerController: User ended picking assets");
 }
@@ -107,4 +106,26 @@
 {
     NSLog(@"GMImagePicker: User pressed cancel button");
 }
+
+#pragma mark UIVideoEditorControllerDelegate cover methods
+
+- (void)assetsPickerController:(GMImagePickerController *)picker videoEditorController:(UIVideoEditorController *)editor didSaveEditedVideoToPath:(NSString *)editedVideoPath; // edited video is saved to a path in app's temporary directory
+{
+    [editor dismissViewControllerAnimated:YES completion:^{
+        [picker dismissViewControllerAnimated:YES completion:nil];
+    }];
+}
+
+- (void)assetsPickerController:(GMImagePickerController *)picker videoEditorController:(UIVideoEditorController *)editor didFailWithError:(NSError *)error;
+{
+    [editor dismissViewControllerAnimated:YES completion:^{
+        [picker dismissViewControllerAnimated:YES completion:nil];
+    }];
+}
+
+- (void)assetsPickerController:(GMImagePickerController *)picker videoEditorController:(UIVideoEditorController *)editor;
+{
+    [editor dismissViewControllerAnimated:YES completion:nil];
+}
+
 @end

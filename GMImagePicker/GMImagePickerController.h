@@ -248,5 +248,37 @@ static CGSize const kPopoverContentSize = {480, 720};
 
 
 
+/**
+ *  @name UIVideoEditorControllerDelegate cover methods
+ */
+
+/**
+ *  Tells the delegate that the highlight was removed from the asset.
+ *
+ *  @param picker           The GMImagePickerController object.
+ *  @param editor           The UIVideoEditorController object.
+ *  @param editedVideoPath  The saved edited video path in app's temporary directory.
+ *
+ */
+- (void)assetsPickerController:(GMImagePickerController *)picker videoEditorController:(UIVideoEditorController *)editor didSaveEditedVideoToPath:(NSString *)editedVideoPath;
+
+/**
+ *  Tells the delegate that the highlight was removed from the asset.
+ *
+ *  @param picker    The GMImagePickerController object.
+ *  @param editor    The UIVideoEditorController object.
+ *  @param error     The asset that had its highlight removed.
+ *
+ */
+- (void)assetsPickerController:(GMImagePickerController *)picker videoEditorController:(UIVideoEditorController *)editor didFailWithError:(NSError *)error;
+
+/**
+ *  Tells the delegate that the movie edit was cancelled.
+ *
+ *  @param picker    The GMImagePickerController object.
+ *  @param editor    The UIVideoEditorController object.
+ *
+ */
+- (void)assetsPickerController:(GMImagePickerController *)picker videoEditorControllerDidCancel:(UIVideoEditorController *)editor;
 
 @end

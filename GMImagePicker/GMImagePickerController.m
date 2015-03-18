@@ -297,18 +297,21 @@
 }
 
 #pragma mark UIVideoEditorControllerDelegate
-- (void)videoEditorController:(UIVideoEditorController *)editor didSaveEditedVideoToPath:(NSString *)editedVideoPath; // edited video is saved to a path in app's temporary directory
+
+- (void)videoEditorController:(UIVideoEditorController *)editor didSaveEditedVideoToPath:(NSString *)editedVideoPath;
 {
-    [editor dismissViewControllerAnimated:YES completion:^{
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }];
+    if ([self.delegate respondsToSelector:@selector(assetsPickerController:videoEditorController:didSaveEditedVideoToPath:)])
+    {
+        [self.delegate assetsPickerController:self videoEditorController:editor didSaveEditedVideoToPath:editedVideoPath];
+    }
 }
 
 - (void)videoEditorController:(UIVideoEditorController *)editor didFailWithError:(NSError *)error;
 {
-    [editor dismissViewControllerAnimated:YES completion:^{
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }];
+    if ([self.delegate respondsToSelector:@selector(assetsPickerController:videoEditorController:didFailWithError:)])
+    {
+        [self.delegate assetsPickerController:self videoEditorController:editor didFailWithError:error];
+    }
 }
 
 - (void)videoEditorControllerDidCancel:(UIVideoEditorController *)editor;
@@ -325,7 +328,10 @@
         }
     }
 
-    [editor dismissViewControllerAnimated:YES completion:nil];
+    if ([self.delegate respondsToSelector:@selector(assetsPickerController:videoEditorControllerDidCancel:)])
+    {
+        [self.delegate assetsPickerController:self videoEditorControllerDidCancel:editor];
+    }
 }
 
 @end
