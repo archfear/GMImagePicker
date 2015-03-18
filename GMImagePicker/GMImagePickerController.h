@@ -63,6 +63,11 @@ static CGSize const kPopoverContentSize = {480, 720};
 @property (nonatomic, assign) BOOL displayAlbumsNumberOfAssets;
 
 /**
+ *  Determines whether or not section headers are displayd for albums.
+ */
+@property (nonatomic) BOOL displayAlbumsSectionHeaders;
+
+/**
  *  Grid customizations:
  *
  *  - colsInPortrait: Number of columns in portrait (3 by default)

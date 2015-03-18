@@ -362,17 +362,21 @@ static NSString * const CollectionCellReuseIdentifier = @"CollectionCell";
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     //Tip: Returning nil hides the section header!
-    
     NSString *title = nil;
-    if (section > 0)
+
+    if (self.picker.displayAlbumsSectionHeaders)
     {
-        //Only show title for non-empty sections:
-        PHFetchResult *fetchResult = self.collectionsFetchResultsAssets[section];
-        if( fetchResult.count >0)
+        if (section > 0)
         {
-            title = self.collectionsLocalizedTitles[section - 1];
+            //Only show title for non-empty sections:
+            PHFetchResult *fetchResult = self.collectionsFetchResultsAssets[section];
+            if( fetchResult.count >0)
+            {
+                title = self.collectionsLocalizedTitles[section - 1];
+            }
         }
     }
+
     return title;
 }
 
