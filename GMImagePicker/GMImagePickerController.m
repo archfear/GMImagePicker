@@ -164,7 +164,7 @@
                                                videoEditor.videoPath = videoPath;
                                                videoEditor.delegate = self;
 
-                                               videoEditor.modalTransitionStyle = UIModalTransitionStylePartialCurl;
+                                               videoEditor.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
                                                self.modalPresentationStyle = UIModalPresentationFullScreen;
                                                videoEditor.navigationBar.barTintColor = [UIColor whiteColor];
                                                videoEditor.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor blackColor]};
