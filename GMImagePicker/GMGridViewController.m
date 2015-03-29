@@ -204,11 +204,11 @@ NSString * const GMGridViewCellIdentifier = @"GMGridViewCellIdentifier";
     if (self.picker.allowsMultipleSelection == YES)
     {
         self.navigationItem.rightBarButtonItem =
-        [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringFromTable(@"picker.navigation.done-button", @"GMImagePicker",@"Done")
+        [[UIBarButtonItem alloc] initWithTitle:NSLocalizedStringFromTableInBundle(@"picker.navigation.done-button", @"GMImagePicker", [NSBundle bundleForClass:GMImagePickerController.class], @"Done")
                                          style:UIBarButtonItemStyleDone
                                         target:self.picker
                                         action:@selector(finishPickingAssets:)];
-        
+
         self.navigationItem.rightBarButtonItem.enabled = (self.picker.selectedAssets.count > 0);
     }
 }
